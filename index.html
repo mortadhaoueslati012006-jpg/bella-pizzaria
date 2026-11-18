@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bella Pizza - Pizzeria Moderne</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="script.js"></script>
+    <script src="notification.js"></script>
+
+</head>
+<body>
+    <!-- Home Page -->
+    <div id="homePage" class="page active">
+
+        <nav class="navbar">
+            <div class="container nav-container">
+                <div class="nav-brand">
+                    <img src="pizza_icon.png" alt="Bella Pizza Logo"  class="brand-logo">
+                   <h1 style="font-size: 64px;color: #333;margin-bottom: 15px;text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);font-weight: 800;letter-spacing: 2px;">Bienvenue !</h1>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="container">
+            <div class="welcome-section">
+                <h2>Chez Bella Pizza</h2>
+                <p>Pizzas italiennes authentiques faites avec passion</p>
+            </div>
+            
+            <div class="info-banner">
+                <strong>🎉 PROMO: -20% sur toutes les commandes ce weekend!</strong> Code: WEEKEND20
+            </div>
+
+            <div class="delivery-info">
+                <h3>🚚 Livraison rapide et gratuite</h3>
+                <div class="delivery-badges">
+                    <div class="delivery-badge">
+                        <span>⚡</span>
+                        <span>Livraison en 30 min</span>
+                    </div>
+                    <div class="delivery-badge">
+                        <span>🆓</span>
+                        <span>Gratuite dès 30 DT</span>
+                    </div>
+                    <div class="delivery-badge">
+                        <span>🍕</span>
+                        <span>Pizza chaude garantie</span>
+                    </div>
+                    <div class="delivery-badge">
+                        <span>💳</span>
+                        <span>Paiement à la livraison</span>
+                    </div>
+                </div>
+            </div>
+            <div class="login-cards">
+                <div class="login-card client-card" onclick="showPage('loginClient')">
+                    <div class="card-icon">👤</div>
+                    <h3>Connexion Client</h3>
+                    <p>Commandez vos pizzas préférées</p>
+                </div>
+
+                <div class="login-card admin-card" onclick="showPage('loginAdmin')">
+                    <div class="card-icon">🔒</div>
+                    <h3>Connexion Admin</h3>
+                    <p>Gérez votre pizzeria</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client Login Page -->
+    <div id="loginClient" class="page">
+        <div class="login-container">
+            <div class="login-box">
+                <div class="login-icon client-bg">👤</div>
+                <h2>Connexion Client</h2>
+                <div id="clientError" class="error-message"></div>
+                <div class="form-group">
+                    <input type="tel" id="clientPhone" placeholder="Numéro de téléphone" class="form-input">
+                </div>
+                <div class="form-group password-group">
+                    <input type="password" id="clientPassword" placeholder="Mot de passe" class="form-input">
+                    <span class="eye-icon" onclick="togglePassword('clientPassword', this)">👁️</span>
+                </div>
+                <button onclick="clientLogin()" class="btn btn-primary">Connexion</button>
+                <button onclick="showPage('homePage')" class="btn btn-secondary">Retour</button>
+                <button onclick="showPage('register')" class="btn btn-link">Nouveau client ? Inscrivez-vous</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Page -->
+    <div id="loginAdmin" class="page">
+        <div class="login-container">
+            <div class="login-box">
+                <div class="login-icon admin-bg">🔒</div>
+                <h2>Connexion Admin</h2>
+                <div id="adminError" class="error-message"></div>
+                <div class="form-group">
+                    <input type="text" id="adminUsername" placeholder="Nom d'utilisateur" class="form-input">
+                </div>
+                <div class="form-group password-group">
+                    <input type="password" id="adminPassword" placeholder="Mot de passe" class="form-input">
+                    <span class="eye-icon" onclick="togglePassword('adminPassword', this)">👁️</span>
+                </div>
+                <button onclick="adminLogin()" class="btn btn-primary">Connexion</button>
+                <button onclick="showPage('homePage')" class="btn btn-secondary">Retour</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Page -->
+    <div id="register" class="page">
+        <div class="login-container">
+            <div class="login-box register-box">
+                <h2>Inscription Client</h2>
+                <div class="form-group">
+                    <input type="text" id="regNom" placeholder="Nom" class="form-input">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="regPrenom" placeholder="Prénom" class="form-input">
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="regPhone" placeholder="Numéro de téléphone" class="form-input">
+                </div>
+                <div class="form-group">
+                    <textarea id="regAddress" placeholder="Adresse" class="form-input"></textarea>
+                </div>
+                <div class="form-group password-group">
+                    <input type="password" id="regPassword" placeholder="Mot de passe" class="form-input">
+                    <span class="eye-icon" onclick="togglePassword('regPassword', this)">👁️</span>
+                </div>
+                <div class="form-group password-group">
+                    <input type="password" id="regConfirmPassword" placeholder="Confirmer mot de passe" class="form-input">
+                    <span class="eye-icon" onclick="togglePassword('regConfirmPassword', this)">👁️</span>
+                </div>
+                <button onclick="registerClient()" class="btn btn-primary">S'inscrire</button>
+                <button onclick="showPage('loginClient')" class="btn btn-secondary">Retour</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Page -->
+    <div id="menuPage" class="page">
+        <nav class="navbar">
+            <div class="container nav-container">
+                <div class="nav-brand">
+                    <span class="pizza-icon">🍕</span>
+                    <h1>Bella Pizza</h1>
+                </div>
+                <div class="nav-actions">
+                    <span id="welcomeUser"></span>
+                    <button onclick="showPage('orderHistory')" class="btn btn-nav">📋 Historique</button>
+                    <div class="cart-icon-container" onclick="showPage('cartPage')">
+                        🛒
+                        <span id="cartBadge" class="cart-badge">0</span>
+                    </div>
+                    <span onclick="logout()" class="logout-btn">🚪 Déconnexion</span>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="menu-tabs">
+                <button class="tab-btn active" onclick="filterCategory('all')">Tout</button>
+                <button class="tab-btn" onclick="filterCategory('pizza')">🍕 Pizzas</button>
+                <button class="tab-btn" onclick="filterCategory('boisson')">🥤 Boissons</button>
+                <button class="tab-btn" onclick="filterCategory('dessert')">🍰 Desserts</button>
+            </div>
+            <div id="menuGrid" class="menu-grid"></div>
+        </div>
+    </div>
+
+    <!-- Order History Page -->
+    <div id="orderHistory" class="page">
+        <nav class="navbar">
+            <div class="container nav-container">
+                <div class="nav-brand">
+                    <span class="pizza-icon">🍕</span>
+                    <h1>Historique des commandes</h1>
+                </div>
+                <button onclick="showPage('menuPage')" class="btn btn-secondary">Retour au menu</button>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div id="historyContent"></div>
+        </div>
+    </div>
+
+    <!-- Cart Page -->
+    <div id="cartPage" class="page">
+        <nav class="navbar">
+            <div class="container nav-container">
+                <div class="nav-brand">
+                    <span class="pizza-icon">🍕</span>
+                    <h1>Panier</h1>
+                </div>
+                <button onclick="showPage('menuPage')" class="btn btn-secondary">Retour au menu</button>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div id="cartContent"></div>
+        </div>
+    </div>
+
+    <!-- Admin Page -->
+    <div id="adminPage" class="page">
+        <nav class="navbar admin-nav">
+            <div class="container nav-container">
+                <div class="nav-brand">
+                    <span class="pizza-icon">🔒</span>
+                    <h1>Panneau Admin</h1>
+                </div>
+                <div class="nav-actions">
+                    <button onclick="showAdminSection('stats')" class="btn btn-nav">📊 Statistiques</button>
+                    <button onclick="showAdminSection('menu')" class="btn btn-nav">🍕 Menu</button>
+                    <button onclick="showAdminSection('promos')" class="btn btn-nav">🎟️ Promos</button>
+                    <button onclick="showAdminSection('users')" class="btn btn-nav">👥 Utilisateurs</button>
+                    <span onclick="logout()" class="logout-btn">🚪 Déconnexion</span>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <!-- Statistics Section -->
+            <div id="statsSection" class="admin-section">
+                <h2 class="section-title">📊 Statistiques de vente</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Aujourd'hui</h3>
+                        <div class="stat-value" id="todaySales">0 DT</div>
+                        <div class="stat-label" id="todayOrders">0 commandes</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Ce mois</h3>
+                        <div class="stat-value" id="monthSales">0 DT</div>
+                        <div class="stat-label" id="monthOrders">0 commandes</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Cette année</h3>
+                        <div class="stat-value" id="yearSales">0 DT</div>
+                        <div class="stat-label" id="yearOrders">0 commandes</div>
+                    </div>
+                </div>
+
+                <div class="top-pizzas-section">
+                    <h3>🏆 Top 3 Pizzas</h3>
+                    <div class="top-tabs">
+                        <button class="top-tab active" onclick="showTopPizzas('day')">Aujourd'hui</button>
+                        <button class="top-tab" onclick="showTopPizzas('month')">Ce mois</button>
+                        <button class="top-tab" onclick="showTopPizzas('year')">Cette année</button>
+                    </div>
+                    <div id="topPizzasContent"></div>
+                </div>
+            </div>
+
+            <!-- Menu Management Section -->
+            <div id="menuSection" class="admin-section" style="display: none;">
+                <div class="admin-header">
+                    <h2 class="section-title">Gérer le menu</h2>
+                    <button onclick="toggleAddForm()" class="btn btn-success">➕ Ajouter un article</button>
+                </div>
+
+                <div id="addItemForm" class="add-form" style="display: none;">
+                    <h3>Ajouter un nouvel article</h3>
+                    <div class="form-grid">
+                        <input type="text" id="newItemId" placeholder="ID" class="form-input">
+                        <input type="text" id="newItemName" placeholder="Nom" class="form-input">
+                        <input type="number" id="newItemPrice" placeholder="Prix (DT)" step="0.01" class="form-input">
+                        <select id="newItemCategory" class="form-input">
+                            <option value="pizza">Pizza</option>
+                            <option value="boisson">Boisson</option>
+                            <option value="dessert">Dessert</option>
+                        </select>
+                        <input type="text" id="newItemImage" placeholder="URL de l'image" class="form-input" style="grid-column: 1 / -1;">
+                        <textarea id="newItemDesc" placeholder="Description" class="form-input" style="grid-column: 1 / -1;"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button onclick="addItem()" class="btn btn-success">Ajouter</button>
+                        <button onclick="toggleAddForm()" class="btn btn-secondary">Annuler</button>
+                    </div>
+                </div>
+
+                <div id="adminMenuGrid" class="menu-grid"></div>
+            </div>
+
+            <!-- Promo Management Section -->
+            <div id="promosSection" class="admin-section" style="display: none;">
+                <div class="admin-header">
+                    <h2 class="section-title">Gérer les codes promo</h2>
+                    <button onclick="togglePromoForm()" class="btn btn-success">➕ Ajouter un code</button>
+                </div>
+
+                <div id="addPromoForm" class="add-form" style="display: none;">
+                    <h3>Ajouter un code promo</h3>
+                    <div class="form-grid">
+                        <input type="text" id="newPromoCode" placeholder="Code (ex: 1234)" class="form-input" maxlength="10">
+                        <input type="number" id="newPromoDiscount" placeholder="Remise (%)" class="form-input" min="1" max="100">
+                    </div>
+                    <div class="form-actions">
+                        <button onclick="addPromo()" class="btn btn-success">Ajouter</button>
+                        <button onclick="togglePromoForm()" class="btn btn-secondary">Annuler</button>
+                    </div>
+                </div>
+
+                <div id="promosGrid" class="promos-grid"></div>
+            </div>
+
+            <!-- Users Management Section -->
+            <div id="usersSection" class="admin-section" style="display: none;">
+                <h2 class="section-title">Gérer les utilisateurs</h2>
+                <div id="usersTable"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customization Modal -->
+    <div id="customModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCustomModal()">&times;</span>
+            <h2>Personnaliser votre pizza</h2>
+            <div id="customContent"></div>
+            <div class="custom-actions">
+                <button onclick="addCustomToCart()" class="btn btn-primary">Ajouter au panier</button>
+                <button onclick="closeCustomModal()" class="btn btn-secondary">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delivery Modal -->
+    <div id="deliveryModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDeliveryModal()">&times;</span>
+            <h2>Type de livraison</h2>
+            <div class="delivery-options">
+                <div class="delivery-option" onclick="selectDelivery('pickup')">
+                    <div class="option-icon">🏪</div>
+                    <h3>À emporter</h3>
+                    <p>Récupérez votre commande au restaurant</p>
+                </div>
+                <div class="delivery-option" onclick="selectDelivery('delivery')">
+                    <div class="option-icon">🛵</div>
+                    <h3>Livraison</h3>
+                    <p>Nous livrons à votre adresse</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Modal -->
+    <div id="locationModal" class="modal">
+        <div class="modal-content location-modal">
+            <span class="close" onclick="closeLocationModal()">&times;</span>
+            <h2>📍 Indiquer votre localisation</h2>
+            <p>Veuillez partager votre position pour la livraison</p>
+            <div id="mapContainer" style="width: 100%; height: 400px; background: #f0f0f0; border-radius: 10px; margin: 20px 0;"></div>
+            <input type="text" id="addressInput" placeholder="Ou entrez votre adresse manuellement" class="form-input">
+            <div class="form-actions">
+                <button onclick="confirmLocation()" class="btn btn-primary">Confirmer l'adresse</button>
+                <button onclick="closeLocationModal()" class="btn btn-secondary">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🍕 Bella Pizza</h3>
+                <p>Pizzas italiennes authentiques faites avec passion depuis 2010.</p>
+                <p>Des ingrédients frais, une recette traditionnelle.</p>
+                <div class="social-icons">
+                    <div class="social-icon" title="Facebook">📘</div>
+                    <div class="social-icon" title="Instagram">📷</div>
+                    <div class="social-icon" title="Twitter">🐦</div>
+                    <div class="social-icon" title="TikTok">🎵</div>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>📞 Contact</h3>
+                <p>📱 Tél: +216 71 234 567</p>
+                <p>📧 Email: contact@bellapizza.tn</p>
+                <p>⏰ Lun-Dim: 11h00 - 23h00</p>
+                <p>🏠 123 Avenue Habib Bourguiba, Tunis</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>🔗 Liens rapides</h3>
+                <a href="#" onclick="showPage('menuPage'); return false;">Notre Menu</a>
+                <a href="#" onclick="showPage('orderHistory'); return false;">Mes Commandes</a>
+                <a href="#">Qui sommes-nous?</a>
+                <a href="#">Conditions d'utilisation</a>
+                <a href="#">Politique de confidentialité</a>
+            </div>
+
+            <div class="footer-section">
+                <h3>🚚 Livraison</h3>
+                <p>✅ Livraison gratuite dès 30 DT</p>
+                <p>⚡ Livraison en 30 min</p>
+                <p>🛵 Toute la région de Tunis</p>
+                <p>💳 Paiement à la livraison</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Bella Pizza. Tous droits réservés. | Développé avec ❤️ en Tunisie</p>
+        </div>
+    </div>
+</footer>
+
+
+</body>
+</html>
